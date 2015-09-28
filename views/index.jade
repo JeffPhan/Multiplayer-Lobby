@@ -1,0 +1,10 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to #{title}
+	body
+		form#login(name='login', method='post', action='lobby')
+			label(for='loginName') Login Name
+			input#username(name='loginName', type='text', placeholder='Login Name', required='')
+			button#submit(type='submit') Submit

@@ -1,0 +1,41 @@
+extends layout
+
+block content
+	h1= title
+	p Welcome to the #{title}
+	head
+		script.
+			var socket = io.connect('http://localhost:3000');
+			socket.emit('loginName', '#{name}');
+			socket.on('userlist', function(data) {
+				var container = document.getElementById("playerlist");
+				container.innerHTML = "";
+				for (users of data) {
+					if(users != '#{name}') {
+						var userElement = document.createElement('span');
+						userElement.innerHTML = users;
+
+						var button = document.createElement('button');
+						button.id = data.indexOf(users);
+						console.log(button.id);
+						button.appendChild(document.createTextNode("Challenge!"));
+
+						button.onclick = function() {
+							socket.emit('challenged', data[this.id]);
+						}
+
+						container.appendChild(button);
+						container.appendChild(userElement);
+						container.appendChild(document.createElement('br'));
+					}
+				}
+			});
+	body
+		label(for='loginName') Welcome 
+			b #{name}
+		br
+		br
+		label#players 
+			b Other players online:
+		br
+		div#playerlist
